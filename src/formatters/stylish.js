@@ -10,19 +10,19 @@ const formatValue = (value) => {
 const stylish = (diff) => {
   const lines = diff.map((node) => {
     switch (node.type) {
-      case 'added':
-        return `  + ${node.key}: ${formatValue(node.value)}`;
-      case 'deleted':
-        return `  - ${node.key}: ${formatValue(node.value)}`;
-      case 'unchanged':
-        return `    ${node.key}: ${formatValue(node.value)}`;
-      case 'changed':
-        return [
-          `  - ${node.key}: ${formatValue(node.value1)}`,
-          `  + ${node.key}: ${formatValue(node.value2)}`,
-        ].join('\n');
-      default:
-        throw new Error(`Unknown node type: ${node.type}`);
+    case 'added':
+      return `  + ${node.key}: ${formatValue(node.value)}`;
+    case 'deleted':
+      return `  - ${node.key}: ${formatValue(node.value)}`;
+    case 'unchanged':
+      return `    ${node.key}: ${formatValue(node.value)}`;
+    case 'changed':
+      return [
+        `  - ${node.key}: ${formatValue(node.value1)}`,
+        `  + ${node.key}: ${formatValue(node.value2)}`,
+      ].join('\n');
+    default:
+      throw new Error(`Unknown node type: ${node.type}`);
     }
   });
 

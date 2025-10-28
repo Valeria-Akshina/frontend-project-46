@@ -8,10 +8,10 @@ const genDiff = (filepath1, filepath2, format = 'stylish') => {
   const diff = buildDiff(data1, data2);
 
   switch (format) {
-    case 'stylish':
-      return stylish(diff);
-    default:
-      throw new Error(`Unsupported format: ${format}`);
+  case 'stylish':
+    return stylish(diff);
+  default:
+    throw new Error(`Unsupported format: ${format}`);
   }
 };
 
