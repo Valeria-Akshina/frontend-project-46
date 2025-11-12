@@ -1,32 +1,58 @@
 import _ from 'lodash';
 
-const formatValue = (value) => {
-  if (_.isObject(value)) {
-    return '[complex value]';
+const stringify = (value, depth) => {
+  if (value === null) {
+    return 'null';
   }
-  return value;
+  
+  if (typeof value === 'boolean') {
+    return value.toString();
+  }
+  
+  if (!_.isPlainObject(value)) {
+    return String(value);
+  }
+
+  const indentSize = depth * 4;
+  const currentIndent = ' '.repeat(indentSize);
+  const bracketIndent = ' '.repeat(indentSize - 4);
+
+  const lines = Object.entries(value).map(([key, val]) => {
+    const formattedValue = stringify(val, depth + 1);
+    return `${currentIndent}${key}: ${formattedValue}`;
+  });
+
+  return ['{', ...lines, `${bracketIndent}}`].join('\n');
 };
 
-const stylish = (diff) => {
+const formatDiff = (diff, depth = 1) => {
+  const indentSize = depth * 4;
+  const currentIndent = ' '.repeat(indentSize - 2);
+  const bracketIndent = ' '.repeat(indentSize - 4);
+
   const lines = diff.map((node) => {
-    switch (node.type) {
+    const { key, type } = node;
+
+    switch (type) {
     case 'added':
-      return `  + ${node.key}: ${formatValue(node.value)}`;
+      return `${currentIndent}+ ${key}: ${stringify(node.value, depth + 1)}`;
     case 'deleted':
-      return `  - ${node.key}: ${formatValue(node.value)}`;
+      return `${currentIndent}- ${key}: ${stringify(node.value, depth + 1)}`;
     case 'unchanged':
-      return `    ${node.key}: ${formatValue(node.value)}`;
+      return `${currentIndent}  ${key}: ${stringify(node.value, depth + 1)}`;
     case 'changed':
       return [
-        `  - ${node.key}: ${formatValue(node.value1)}`,
-        `  + ${node.key}: ${formatValue(node.value2)}`,
+        `${currentIndent}- ${key}: ${stringify(node.value1, depth + 1)}`,
+        `${currentIndent}+ ${key}: ${stringify(node.value2, depth + 1)}`,
       ].join('\n');
+    case 'nested':
+      return `${currentIndent}  ${key}: ${formatDiff(node.children, depth + 1)}`;
     default:
-      throw new Error(`Unknown node type: ${node.type}`);
+      throw new Error(`Unknown node type: ${type}`);
     }
   });
 
-  return `{\n${lines.join('\n')}\n}`;
+  return ['{', ...lines, `${bracketIndent}}`].join('\n');
 };
 
-export default stylish;
+export default formatDiff;
