@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 const readFile = (filename) => readFileSync(getFixturePath(filename), 'utf-8').trim();
 
-// Тесты для stylish формата (вложенные структуры)
+// Тесты для stylish формата
 test('compare nested JSON files with stylish format', () => {
   const file1 = getFixturePath('file1-nested.json');
   const file2 = getFixturePath('file2-nested.json');
@@ -34,7 +34,6 @@ test('compare nested JSON files with plain format', () => {
   const file1 = getFixturePath('file1-nested.json');
   const file2 = getFixturePath('file2-nested.json');
   const expected = readFile('expected-plain.txt');
-  
   const result = genDiff(file1, file2, 'plain');
   expect(result).toEqual(expected);
 });
@@ -45,6 +44,25 @@ test('compare nested YAML files with plain format', () => {
   const expected = readFile('expected-plain.txt');
   
   const result = genDiff(file1, file2, 'plain');
+  expect(result).toEqual(expected);
+});
+
+// Тесты для json формата
+test('compare nested JSON files with json format', () => {
+  const file1 = getFixturePath('file1-nested.json');
+  const file2 = getFixturePath('file2-nested.json');
+  const expected = readFile('expected-json.txt');
+  
+  const result = genDiff(file1, file2, 'json');
+  expect(result).toEqual(expected);
+});
+
+test('compare nested YAML files with json format', () => {
+  const file1 = getFixturePath('file1-nested.yaml');
+  const file2 = getFixturePath('file2-nested.yaml');
+  const expected = readFile('expected-json.txt');
+  
+  const result = genDiff(file1, file2, 'json');
   expect(result).toEqual(expected);
 });
 
@@ -63,19 +81,4 @@ test('throws error for unknown format', () => {
   const file2 = getFixturePath('file2-nested.json');
   
   expect(() => genDiff(file1, file2, 'unknown')).toThrow('Unknown format: unknown');
-});
-
-test('debug: check plain format output', () => {
-  const file1 = getFixturePath('file1-nested.json');
-  const file2 = getFixturePath('file2-nested.json');
-  const expected = readFile('expected-plain.txt');
-  const result = genDiff(file1, file2, 'plain');
-  
-  console.log('Expected lines:');
-  expected.split('\n').forEach((line, i) => console.log(`${i}: "${line}"`));
-  
-  console.log('Actual lines:');
-  result.split('\n').forEach((line, i) => console.log(`${i}: "${line}"`));
-  
-  expect(result).toEqual(expected);
 });
