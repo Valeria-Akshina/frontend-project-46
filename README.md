@@ -15,5 +15,13 @@ git clone git@github.com:Valeria-Akshina/frontend-project-46.git
 # Установка зависимостей
 npm install
 
-# Запуск development сервера
+# Запуск
 npm start
+
+```
+
+## 🎬 Демонстрация выполнения работы:
+
+- Сравнения плоских файлов:
+
+[![Demo](demo.gif)](https://asciinema.org/a/lf1McMGlTiy24e6wE6aszCpb9)
