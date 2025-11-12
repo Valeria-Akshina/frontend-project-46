@@ -24,4 +24,4 @@ npm start
 
 - Сравнения плоских файлов:
 
-[![Demo](demo.gif)](https://asciinema.org/a/lf1McMGlTiy24e6wE6aszCpb9)
+[![asciicast](https://asciinema.org/a/lf1McMGlTiy24e6wE6aszCpb9.svg)](https://asciinema.org/a/lf1McMGlTiy24e6wE6aszCpb9)
